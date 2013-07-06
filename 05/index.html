@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Blender</title>    
+    <script src="../lib/babylon.1.0.1.js"></script>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        if (BABYLON.Engine.isSupported()) {
+            var canvas = document.getElementById("renderCanvas");
+            var engine = new BABYLON.Engine(canvas, true);
+
+            BABYLON.SceneLoader.Load("", "cup.babylon", engine, function (newScene) {
+                newScene.executeWhenReady(function () {
+                    // Attach camera to canvas inputs
+                    newScene.activeCamera.attachControl(canvas);
+
+                    // Once the scene is loaded, just register a render loop to render it
+                    engine.runRenderLoop(function() {
+                        newScene.render();
+                    });
+                });
+            }, function (progress) {
+                // To do: give progress feedback to user
+            });
+        }
+    </script>
+</body>
+</html>
