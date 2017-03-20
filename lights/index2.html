@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Babylon - Lights</title>
+    <script src="../lib/babylon.custom.js"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+</head>
+<body>
+<canvas id="renderCanvas"></canvas>
+<script type="application/javascript">
+
+    var canvas = document.getElementById("renderCanvas");
+
+    var engine = new BABYLON.Engine(canvas, true);
+
+    var createScene = function () {
+
+        var scene = new BABYLON.Scene(engine);
+
+        scene.clearColor = new BABYLON.Color3(0,1,0);
+
+        var camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", 1, 0.8, 10, new BABYLON.Vector3(0, 0, 0), scene);
+
+        camera.setTarget(BABYLON.Vector3.Zero());
+
+        camera.attachControl(canvas, false);
+
+        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0,1,0), scene);
+
+        light.intensity = .5;
+
+        var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
+
+        sphere.position.y = 1;
+
+        var ground = BABYLON.Mesh.CreateGround("ground1", 6, 6, 2, scene);
+
+        var sphere2 = BABYLON.Mesh.CreateSphere("sphere2", 16, 2, scene);
+        sphere2.position.y = 8;
+        sphere2.position.x = 2;
+
+        /*var pointLight = new BABYLON.PointLight("Omni0", new BABYLON.Vector3(1, 10, 1), scene);
+        pointLight.diffuse = new BABYLON.Color3(1, 0, 0);
+        pointLight.specular = new BABYLON.Color3(1, 1, 1);*/
+
+        /*var directionalLight = new BABYLON.DirectionalLight("Dir0", new BABYLON.Vector3(0, -1, 0), scene);
+        directionalLight.diffuse = new BABYLON.Color3(1, 0, 0);
+        directionalLight.specular = new BABYLON.Color3(1, 1, 1);*/
+
+        /*var spotLight = new BABYLON.SpotLight("Spot0", new BABYLON.Vector3(0, 30, -10), new BABYLON.Vector3(0, -1, 0), 0.8, 2, scene);
+        spotLight.diffuse = new BABYLON.Color3(1, 0, 0);
+        spotLight.specular = new BABYLON.Color3(1, 1, 1);*/
+
+        /*var hemisphericLight = new BABYLON.HemisphericLight("Hemi0", new BABYLON.Vector3(0, 1, 0), scene);
+        hemisphericLight.diffuse = new BABYLON.Color3(1, 1, 1);
+        hemisphericLight.specular = new BABYLON.Color3(1, 1, 1);
+        hemisphericLight.groundColor = new BABYLON.Color3(0, 0, 0);*/
+
+        /*var spotLight = new BABYLON.SpotLight("", new BABYLON.Vector3.Zero(), new BABYLON.Vector3.Zero(), 0, 0, scene);
+         spotLight.name = "My Slowly and Discretely Constructed Spot Light"
+         spotLight.position = new BABYLON.Vector3(0, 30, -10);
+         spotLight.direction = new BABYLON.Vector3(0, -1, 0);
+         spotLight.angle = 0.8;
+         spotLight.exponent = 2;
+         spotLight.intensity = 0.5;
+         spotLight.diffuse = new BABYLON.Color3(1, 1, 1);
+         spotLight.specular = new BABYLON.Color3(1, 1, 1);
+         spotLight.setEnabled(1);*/
+
+        var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(20, 20, 100), scene);
+
+        var getsphere = scene.getMeshByName("sphere2");
+
+        var godrays = new BABYLON.VolumetricLightScatteringPostProcess("godrays", 1.0, camera, getsphere, 75);
+
+        /*godrays.mesh.material.diffuseTexture = new BABYLON.Texture('background.jpg', scene, true, false, BABYLON.Texture.BILINEAR_SAMPLINGMODE);
+        godrays.mesh.material.diffuseTexture.hasAlpha = true;
+        godrays.mesh.position = new BABYLON.Vector3(-150, 150, 150);
+        godrays.mesh.scaling = new BABYLON.Vector3(350, 350, 350);*/
+
+        light.position = godrays.mesh.position;
+
+        return scene;
+
+    };
+
+    var scene = createScene();
+
+    engine.runRenderLoop(function () {
+        scene.render();
+    });
+
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+
+</script>
+</body>
+</html>

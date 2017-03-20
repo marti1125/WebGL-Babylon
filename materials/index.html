@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Babylon - Basic Materials</title>
+    <script src="../lib/babylon.custom.js"></script>
+    <style>
+        html, body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+</head>
+<body>
+<canvas id="renderCanvas"></canvas>
+<script type="application/javascript">
+
+    var canvas = document.getElementById("renderCanvas");
+
+    var engine = new BABYLON.Engine(canvas, true);
+
+    var createScene = function () {
+
+        var scene = new BABYLON.Scene(engine);
+
+        var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(0,100,100), scene);
+
+        var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0.8, 100, BABYLON.Vector3.Zero(), scene);
+
+        camera.setTarget(BABYLON.Vector3.Zero());
+
+        camera.attachControl(canvas, false);
+
+        var sphere1 = BABYLON.Mesh.CreateSphere("sphere1", 10.0, 6.0,  scene);
+        var sphere2 = BABYLON.Mesh.CreateSphere("sphere2", 10.0, 7.0,  scene);
+        var sphere3 = BABYLON.Mesh.CreateSphere("sphere3", 10.0, 8.0,  scene);
+
+        var ground = BABYLON.Mesh.CreateGround("ground1", 80, 80, 2, scene);
+
+        sphere1.position.y = -10;
+        sphere2.position.y = 10;
+        sphere3.position.y = 20;
+        ground.position.x = 10;
+        ground.position.y = -15;
+
+        var materialSphere1 = new BABYLON.StandardMaterial("texture1", scene);
+        materialSphere1.alpha = 0.5;
+        materialSphere1.backFaceCulling = false;
+        materialSphere1.diffuseColor = new BABYLON.Color3(4.0, 0.2, 0.7);
+
+        var materialSphere2 = new BABYLON.StandardMaterial("texture2", scene);
+        materialSphere2.wireframe = true;
+
+        var materialSphere3 = new BABYLON.StandardMaterial("texture3", scene);
+        materialSphere3.wireframe = true;
+        materialSphere3.diffuseColor = new BABYLON.Color3(6, 0.2, 0.7);
+
+        var materialSphere4 = new BABYLON.StandardMaterial("texture4", scene);
+        materialSphere4.ambientColor = new BABYLON.Color3(1, 0.2, 0.7);
+        materialSphere4.ambientTexture = new BABYLON.Texture("grass.jpeg", scene);
+
+        sphere1.material = materialSphere1;
+        sphere2.material = materialSphere2;
+        sphere3.material = materialSphere3;
+        ground.material = materialSphere4;
+
+        return scene;
+
+    };
+
+    var scene = createScene();
+
+    engine.runRenderLoop(function () {
+        scene.render();
+    });
+
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+
+</script>
+</body>
+</html>
